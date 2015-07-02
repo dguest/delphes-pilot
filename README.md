@@ -10,6 +10,8 @@ When running on the cluster, the `.lhe` input is copied to a directory in `/scra
 Edit `config.sh` to point at your installation of pythia and Delphes.
 If you're using the madgraph-provided versions, you can just set `MG_DIR` in the example config provided.
 
+If you want to modify the pythia/Delphes cards used during the processing, either edit the default ones in `Cards/`, or symlink them to your own.
+
 ## Use
 To run locally, simply do:
 ```
