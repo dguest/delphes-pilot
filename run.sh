@@ -64,18 +64,59 @@ fi
 
 output_file=$output_path/$output_name
 
+# source the configuration environment
+if [ -e config.sh ]; then
+	source config.sh
+fi
+
+if [ -z "$PYTHIA_DIR" ]; then
+	echo "PYTHIA_DIR variable not defined!" >&2
+	exit 1
+fi
+
+if [ -z "$DELPHES_DIR" ]; then
+	echo "DELPHES_DIR variable not defined!" >&2
+	exit 1
+fi
+
+clean_stage() {
+	echo "Removing staging area at $stage_path"
+	rm -rf $stage_path
+}
+
 # setup the working directory for pythia and delphes to run in
 echo "Staging in $stage_path"
 ./scripts/stage.sh $input_file $stage_path
 
+if [ $? -ne 0 ]; then
+	echo "Staging failed!" >&2
+	clean_stage
+	exit 1
+fi
+
 # move to the stage and run the processing scripts
 echo "Running scripts..."
 pushd $stage_path/run
+
 ./process_lhef.sh
+process_code=$?
+
 popd
 
+if [ $process_code -ne 0 ]; then
+	echo "Processing failed! Code=$process_code" >&2
+	clean_stage
+	exit $process_code
+fi
+
 echo "Copying output file..."
+echo "cp $stage_path/run/delphes.root $output_file"
 cp $stage_path/run/delphes.root $output_file
 
-echo "Removing staging area..."
-rm -rf $stage_path
+if [ $? -ne 0 ]; then
+	echo "Failed to copy delphes file!" >&2
+	clean_stage
+	exit 1
+fi
+
+clean_stage
