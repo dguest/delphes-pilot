@@ -3,6 +3,15 @@
 Simple driver scripts to run pythia/delphes quickly in an isolated staging environment.
 Especially useful for iterative testing or to parallelize processing of .lhe files outside of madevent.
 
+---
+**TL;DR:** You can do this:
+```
+./submit.sh Events/run_*/unweighted_events.lhe.gz
+```
+on your madgraph directories to fast-sim all parton events in parallel.
+
+---
+
 Running in local mode, the script will setup a directory in `/tmp` to process the file.
 When running on the cluster, the `.lhe` input is copied to a directory in `/scratch/<username>/` and processed from there.
 
