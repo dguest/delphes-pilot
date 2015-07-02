@@ -1,19 +1,19 @@
 #!/bin/bash
 
-show_help() {
-	echo "Submit pythia/delphes jobs to the slurm cluster."
-	echo "Usage: $0 [options] input_file [input_file ...]"
-	echo "Options:"
-	echo "  -t TAG_NAME     A prefix tag for output files."
-	echo "  -c N_CORES      Number of cores to request per job."
-	echo "  -p PARTITION    The slurm partition to submit to."
-	echo "  -q              Squelch slurm logs."
-}
-
 # defaults
 ncores=2
 quiet=0
 partition=atlas_all
+
+show_help() {
+	echo "Submit pythia/delphes jobs to the slurm cluster."
+	echo "Usage: $0 [options] input_file [input_file ...]"
+	echo "Options:"
+	echo "  -t TAG_NAME     A prefix tag for output files (e.g. <TAG_NAME>_delphes.root)."
+	echo "  -c N_CORES      Number of cores to request per job. (Default: $ncores)"
+	echo "  -p PARTITION    The slurm partition to submit to. (Default: $partition)"
+	echo "  -q              Squelch slurm logs."
+}
 
 # parse CLI
 while getopts ":h?t:c:p:q" opt; do

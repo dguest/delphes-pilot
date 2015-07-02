@@ -1,13 +1,13 @@
 #!/bin/bash
 
+output_name=delphes.root
+
 show_help() {
 	echo "Setup staging area and run pythia/delphes in isolation."
 	echo "Usage: $0 [options] input_file"
-	echo "  -o OUTPUT_PATH    The destination path for output file."
-	echo "  -n OUTPUT_NAME    The output filename."
+	echo "  -o OUTPUT_PATH    The destination path for output file. (Default: same path as input file)"
+	echo "  -n OUTPUT_NAME    The output filename. (Default: $output_name)"
 }
-
-output_name=delphes.root
 
 while getopts ":h?o:n:" opt; do
     case "$opt" in
