@@ -3,6 +3,7 @@
 # defaults
 ncores=2
 quiet=0
+recurse=0
 partition=atlas_all
 
 show_help() {
@@ -12,11 +13,12 @@ show_help() {
 	echo "  -t TAG_NAME     A prefix tag for output files (e.g. <TAG_NAME>_delphes.root)."
 	echo "  -c N_CORES      Number of cores to request per job. (Default: $ncores)"
 	echo "  -p PARTITION    The slurm partition to submit to. (Default: $partition)"
+	echo "  -r              Recursively find unweighted_events.lhe(.gz) files in the given directory."
 	echo "  -q              Squelch slurm logs."
 }
 
 # parse CLI
-while getopts ":h?t:c:p:q" opt; do
+while getopts ":h?t:c:p:rq" opt; do
     case "$opt" in
     h)  show_help
         exit 0
@@ -26,6 +28,8 @@ while getopts ":h?t:c:p:q" opt; do
     c)  ncores=$OPTARG
         ;;
     p)  partition=$OPTARG
+        ;;
+    r)  recurse=1
         ;;
     q)  quiet=1
         ;;
@@ -51,6 +55,12 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
+if [ "$recurse" == "0" ]; then
+	input_files=$@
+else
+	input_files=$(find $1 -regex ".*unweighted_events\.lhe\(\.gz\)?")
+fi
+
 # add a tag to the input filename, if requested.
 output_name=delphes.root
 if [ ! -z "$tag" ]; then
@@ -65,7 +75,7 @@ if [ "$quiet" == "1" ]; then
 fi
 
 # schedule a job for each input file
-for input_file in $@; do
+for input_file in $input_files; do
 	echo "Submitting job for $input_file"
 	sbatch $SLURM_OPTS ./run.sh -n $output_name $input_file
 done
