@@ -28,16 +28,18 @@ if [ ! -e "unweighted_events.lhe" ]; then
 fi
 
 # run pythia
-$PYTHIA_DIR/pythia
+#$PYTHIA_DIR/pythia
 
-pythia_code=$?
-if [ $pythia_code -ne 0 ]; then
-	echo "Pythia returned error! Code=$pythia_code" >&2
-	exit $pythia_code
-fi
+#pythia_code=$?
+#if [ $pythia_code -ne 0 ]; then
+#	echo "Pythia returned error! Code=$pythia_code" >&2
+#	exit $pythia_code
+#fi
 
 # run delphes
-$DELPHES_DIR/DelphesSTDHEP ../Cards/delphes_card.dat delphes.root pythia_events.hep
+#$DELPHES_DIR/DelphesSTDHEP ../Cards/delphes_card.dat delphes.root pythia_events.hep
+
+$DELPHES_DIR/DelphesPythia8 ../Cards/delphes_card.dat ../Cards/configLHE.cmnd delphes.root
 
 delphes_code=$?
 if [ $delphes_code -ne 0 ]; then
@@ -46,4 +48,4 @@ if [ $delphes_code -ne 0 ]; then
 fi
 
 # clean the hep file
-rm pythia_events.hep
+#rm pythia_events.hep
