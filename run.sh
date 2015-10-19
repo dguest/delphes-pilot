@@ -129,6 +129,14 @@ echo "Copying output file..."
 echo "cp $stage_path/run/delphes.root $output_file"
 cp $stage_path/run/delphes.root $output_file
 
+text_tuple=$stage_path/run/delphes.ntuple.txt
+if [ -f $text_tuple ]; then
+    echo "zipping output text file..."
+    gzip $text_tuple
+    echo "copying zip file..."
+    cp ${text_tuple}.gz ${output_file%.root}.ntuple.txt.gz
+fi
+
 if [ $? -ne 0 ]; then
 	echo "Failed to copy delphes file!" >&2
 	clean_stage
