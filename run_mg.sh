@@ -95,7 +95,6 @@ echo "Staging in $stage_path"
 echo "./scripts/stage_mg.sh $input_file $stage_path"
 ./scripts/stage_mg.sh $input_file $stage_path
 stage_code=$?
-n
 if [ $stage_code -ne 0 ]; then
 	echo "Staging failed! Code=$stage_code" >&2
 	clean_stage
